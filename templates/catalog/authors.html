@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %} All Authors {% endblock %}
+{% block content %}
+    <main>
+        <div class="album py-5 bg-light" bis_skin_checked="1">
+            <div class="container" bis_skin_checked="1">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" bis_skin_checked="1">
+
+
+                    {% for author in authors %}
+                    <div class="col" bis_skin_checked="1">
+                    <div class="card shadow-sm align-items-center" bis_skin_checked="1">
+                    {% if author.photo %} <img src="{{ author.photo.url }}" style="text-align: center; padding-left: auto" width="60%" height="270px"> {% endif %}
+                    <div class="card-body" bis_skin_checked="1">
+                        <h4 class="card-text">{{author}}</h4>
+                        <p class="card-text"> {{author.date_of_birth}} {% if author.date_of_death%} - {{author.date_of_death}} {% endif %}</p>
+                            <div class="d-flex justify-content-between align-items-center" bis_skin_checked="1">
+                            <div class="btn-group" bis_skin_checked="1">
+                                <a href="{{ author.get_author_url }}" class="btn btn-sm btn-outline-info" >{{author.last_name}}'s catalog.</a>
+                            </div>
+                            </div>
+                    </div>
+                    </div>
+                    </div>
+                    {% endfor %}
+
+
+            </div>
+          </div>
+        </div>
+    </main>
+{% endblock %}
