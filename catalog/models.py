@@ -30,9 +30,9 @@ class Book(models.Model):
     date_of_publication = models.DateField(blank=True, null=True)
     price = models.DecimalField(max_digits=5, default=1.00, decimal_places=2)
     amount = models.IntegerField(null=False)
-    book_cover = models.ImageField(upload_to='books/', blank=True, default="book-placeholder.jpg")
+    book_cover = models.ImageField(upload_to='books/', blank=True, default="book-placeholder.jpeg")
     genre = models.ManyToManyField(Genre)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True, related_name="books")
 
     def __str__(self):
         return f"{self.title}"

@@ -65,10 +65,16 @@ class SearchView(TemplateView):
 
     def post(self, request):
         search = request.POST['search']
-        books_by_filter = Book.objects.filter(title__icontains=search)
+        books_by_title = Book.objects.filter(title__icontains=search)
+        books_by_summary = Book.objects.filter(summary__icontains=search)
+        books_by_dop = Book.objects.filter(date_of_publication__icontains=search)
+        books_by_price = Book.objects.filter(price__icontains=search)
+        books_by_author_last_name = Book.objects.filter(author__last_name__icontains=search)
+        books_by_author_first_name = Book.objects.filter(author__first_name__icontains=search)
 
+        books = books_by_title.union(books_by_dop,books_by_price,books_by_summary, books_by_author_first_name,books_by_author_last_name, all=False)
         params = {
-            'books': books_by_filter,
+            'books': books,
             'title': f"'{search}'"
         }
 
