@@ -21,10 +21,39 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.twitter',
     'catalog',
     'accounts',
     'cart',
+    'api',
+    'rest_framework'
 ]
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'social.backends.twitter.TwitterOAuth'
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email'
+        ]
+    },
+    'twitter': {
+        'SCOPE': [
+            'profile',
+            'email'
+        ]
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -108,6 +137,7 @@ LOGOUT_REDIRECT_URL = '/'
 MEDIA_URL = '/source/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'source')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 
 

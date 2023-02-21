@@ -12,6 +12,9 @@ class Author(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+    def get_full_name(self):
+        return f'{self.last_name} {self.first_name}'
+
     def get_author_url(self):
         return reverse("catalog-authors-author", args=[self.first_name, self.last_name, self.id])
 
@@ -22,6 +25,9 @@ class Genre(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_genre_url(self):
+        return reverse("catalog-genres", args=[self.id])
 
 
 class Book(models.Model):

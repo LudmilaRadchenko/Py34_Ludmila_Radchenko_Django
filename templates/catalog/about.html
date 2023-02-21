@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %} About the Shop {% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h5>Current authors:</h5>
+      {% for author in authors %}
+      <a href="{{ author.get_author_url}}" class="btn btn-sm btn-outline-dark">{{author.first_name}} {{author.last_name}}</a>
+      {% endfor %}
+    </div>
+    <div class="col order-5">
+      <h5>Current books:</h5>
+      {% for book in books %}
+      <a href="{{ book.get_book_url}}" class="btn btn-sm btn-outline-dark">{{book.title}}</a>
+      {% endfor %}
+    </div>
+    <div class="col order-1">
+      <h5>Current genres:</h5>
+      {% for genre in genres %}
+      <a href="{{ genre.get_genre_url}}" class="btn btn-sm btn-outline-dark">{{genre.name}}</a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

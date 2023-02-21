@@ -4,6 +4,7 @@ from catalog.models import Book
 from django.views.generic import TemplateView, RedirectView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 
 
 class CartView(RedirectView):
@@ -17,7 +18,7 @@ class CartView(RedirectView):
         cart = Cart.objects.get(user=request.user)
         cart.products.add(book)
 
-        return redirect('catalog-index')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class CartDeleteView(RedirectView):

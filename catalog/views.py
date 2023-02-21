@@ -1,17 +1,28 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from .models import Book, Author
+from .models import Book, Author, Genre
+from cart.models import Cart
 
 
 class CatalogView(TemplateView):
     template_name = "catalog/catalog.html"
 
     def get(self, request):
+        try:
+            Cart.objects.get(user=request.user)
+        except:
+            try:
+                Cart.objects.create(user=request.user)
+            except:
+                print("User is anonymous!")
+
         books = Book.objects.all()
+        genres = Genre.objects.all()
 
         params = {
             'title': "All",
-            'books': books
+            'books': books,
+            'genres': genres
         }
 
         return render(request, self.template_name, params)
@@ -22,10 +33,12 @@ class BookView(TemplateView):
 
     def get(self, request, id):
         book = Book.objects.get(id=id)
+        genres = Genre.objects.all()
 
         params = {
             'title': f"About {book.title}",
-            'book': book
+            'book': book,
+            'genres': genres
         }
 
         return render(request, self.template_name, params)
@@ -36,9 +49,11 @@ class AuthorsView(TemplateView):
 
     def get(self, request):
         authors = Author.objects.all()
+        genres = Genre.objects.all()
 
         params = {
-            'authors': authors
+            'authors': authors,
+            'genres': genres
         }
 
         return render(request, self.template_name, params)
@@ -50,11 +65,13 @@ class AuthorCatalogView(TemplateView):
     def get(self, request, first_name, last_name, id):
         author = Author.objects.get(id=id)
         books = Book.objects.filter(author=author)
+        genres = Genre.objects.all()
 
         params = {
             'title': f"{last_name}'s",
             'author': author,
-            'books': books
+            'books': books,
+            'genres': genres
         }
 
         return render(request, self.template_name, params)
@@ -65,6 +82,7 @@ class SearchView(TemplateView):
 
     def post(self, request):
         search = request.POST['search']
+        genres = Genre.objects.all()
         books_by_title = Book.objects.filter(title__icontains=search)
         books_by_summary = Book.objects.filter(summary__icontains=search)
         books_by_dop = Book.objects.filter(date_of_publication__icontains=search)
@@ -75,9 +93,44 @@ class SearchView(TemplateView):
         books = books_by_title.union(books_by_dop,books_by_price,books_by_summary, books_by_author_first_name,books_by_author_last_name, all=False)
         params = {
             'books': books,
-            'title': f"'{search}'"
+            'title': f"'{search}'",
+            'genres': genres
         }
 
         return render(request, self.template_name, params)
+
+class GenreCatalogView(TemplateView):
+    template_name = "catalog/catalog.html"
+
+    def get(self, request, id):
+        genre = Genre.objects.get(id=id)
+        books = Book.objects.filter(genre=genre)
+        genres = Genre.objects.all()
+
+        params = {
+            'title': f"{genre.name}'s",
+            'books': books,
+            'genres': genres
+        }
+
+        return render(request, self.template_name, params)
+
+
+class AboutView(TemplateView):
+    template_name = "catalog/about.html"
+
+    def get(self, request):
+        authors = Author.objects.all()
+        books = Book.objects.all()
+        genres = Genre.objects.all()
+
+        params = {
+            'authors': authors,
+            'books': books,
+            'genres': genres
+        }
+
+        return render(request, self.template_name, params)
+
 
 
